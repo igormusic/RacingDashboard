@@ -1,0 +1,5 @@
+<menu id="SettingsMenu">
+    <menu-item id="mnuDistance">@Strings.lbl_distance</menu-item>
+    <menu-item id="mnuTime">@Strings.lbl_time</menu-item>
+    <menu-item id="mnuHR">@Strings.lbl_HR</menu-item>
+</menu>

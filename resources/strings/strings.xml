@@ -1,0 +1,9 @@
+<strings>
+    <string id="AppName">Racing Dashboard</string>
+    <string id="prompt_select">Click select</string>
+    <string id="lbl_start">Start Race</string>
+    <string id="lbl_settings">Settings</string>
+    <string id="lbl_distance">Distance</string>
+    <string id="lbl_time">Time</string>
+    <string id="lbl_HR">HR</string>
+</strings>

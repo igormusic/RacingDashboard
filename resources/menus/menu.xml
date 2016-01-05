@@ -1,0 +1,4 @@
+<menu id="MainMenu">
+    <menu-item id="mnuStartRace">@Strings.lbl_start</menu-item>
+    <menu-item id="mnuSettings">@Strings.lbl_settings</menu-item>
+</menu>
