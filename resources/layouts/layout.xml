@@ -1,4 +1,4 @@
 <layout id="MainLayout">
     <label x="center" y="5" text="@Strings.prompt_select" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER" />
-    <bitmap id="id_logo" x="center" y="center" filename="../drawables/bt.jpg" />
+    
 </layout>

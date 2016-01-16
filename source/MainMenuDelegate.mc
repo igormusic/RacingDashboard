@@ -5,7 +5,7 @@ class MainMenuDelegate extends Ui.MenuInputDelegate {
 
     function initialize() {
         MenuInputDelegate.initialize();
-    }
+    } 
 
     function onMenuItem(item) {
         if (item == :mnuStartRace) {

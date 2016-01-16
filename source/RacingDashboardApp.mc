@@ -1,11 +1,23 @@
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.Position as Position;
+using Dashboard as ds;
 
 class RacingDashboardApp extends App.AppBase {
 
     function initialize() {
         AppBase.initialize();
+        
+        setDefaults();
+    }
+    
+    function setDefaults()
+    {      
+        ds.setDistance(10);
+        ds.setMaxHR(160);
+        ds.setMinHR(150);
+		ds.setTime(40*60);
+    	
     }
 
     //! onStart() is called on application start up

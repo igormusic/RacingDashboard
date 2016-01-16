@@ -1,8 +1,3 @@
-//!
-//! Copyright 2015 by Garmin Ltd. or its subsidiaries.
-//! Subject to Garmin SDK License Agreement and Wearables
-//! Application Developer Agreement.
-//!
 
 using Toybox.Graphics as Gfx;
 using Toybox.System as Sys;
@@ -15,6 +10,7 @@ using Toybox.WatchUi as Ui;
 using Toybox.Application as App;
 using Toybox.Activity as Act;
 using Toybox.ActivityRecording as Record;
+using Dashboard as ds;
 
 var session;
 var lowColor = Gfx.COLOR_BLUE;
@@ -34,7 +30,7 @@ class RacingView extends Ui.View
     	// Set up a 1Hz update timer because we aren't registering
         // for any data callbacks that can kick our display update.
         timer = new Timer.Timer();
-        timer.start( method(:onTimer), 5000, true );
+        timer.start( method(:onTimer), 500, true );
     	
     	startRecording();
     }
@@ -125,18 +121,37 @@ class RacingView extends Ui.View
 			}
 		}
 		
+		//assume +- 0.75% tolerance for HR gauge, and 0.25% tolerance for green section 
+        var totalTolerance = ds.getTime() * 0.75 / 100;
+        var greenTolerance = ds.getTime() * 0.25 / 100;
+        var minSpeed = ds.getMinExpectedSpeed(totalTolerance);
+        var maxSpeed = ds.getMaxExpectedSpeed(totalTolerance);
+        var minGreen = ds.getMinExpectedSpeed(greenTolerance);
+        var maxGreen = ds.getMaxExpectedSpeed(greenTolerance); 
+        var secondsAhead = ds.getSecondsAhead(elapsedDistance, elapsedTime);
+        var timeAhead = getFormatedTime(secondsAhead);
+		
 		Sys.println("currentHeartRate=" + currentHeartRate.format("%d"));
 		Sys.println("averageSpeed=" + averageSpeed.format("%d"));
 		Sys.println("elapsedDistance=" + elapsedDistance.format("%d"));
 		Sys.println("currentCadence=" + currentCadence.format("%d"));
 		Sys.println("elapsedTime=" + elapsedTime.format("%d"));
+       	Sys.println("totalTolerance=" + totalTolerance.format("%f"));
+       	Sys.println("greenTolerance=" + greenTolerance.format("%f"));
+       	Sys.println("minSpeed=" + minSpeed.format("%f"));
+       	Sys.println("maxSpeed=" + maxSpeed.format("%f"));
+       	Sys.println("minGreen=" + minGreen.format("%f"));
+       	Sys.println("maxGreen=" + maxGreen.format("%f"));
+       	Sys.println("secondsAhead=" + secondsAhead.format("%f"));
        	
-        drawHRGauge(dc, currentHeartRate, 155.0, 165.0, 140.0, 180.0);
-        drawPaceGauge(dc, averageSpeed,  getSpeedFromPace(4.0, 18.0),getSpeedFromPace(4.0, 6.0),getSpeedFromPace(4.0, 14.0),getSpeedFromPace(4.0, 10.0)); 
-    	drawDistanceGauge(dc, elapsedDistance, 1.0);
+        drawHRGauge(dc, currentHeartRate, ds.getMinHR(), ds.getMaxHR(), 140.0, 180.0);
+            
+        //drawPaceGauge(dc, averageSpeed,  getSpeedFromPace(4.0, 18.0),getSpeedFromPace(4.0, 6.0),getSpeedFromPace(4.0, 14.0),getSpeedFromPace(4.0, 10.0)); 
+    	drawPaceGauge(dc, averageSpeed,  minSpeed,minGreen,maxSpeed,maxGreen);
+    	drawDistanceGauge(dc, elapsedDistance, ds.getDistance());
     	
     	//activity.elapsedTime - in ms
-    	drawTime(dc,getFormatedTime(elapsedTime),"+1:02");
+    	drawTime(dc,getFormatedTime(elapsedTime),timeAhead);
     	drawCadence(dc, currentCadence);
     }
     
