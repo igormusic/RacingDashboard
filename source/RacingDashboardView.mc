@@ -36,7 +36,7 @@ class RacingDashboardView extends Ui.View {
         dc.drawText(85, 40  ,font, ds.getDistance().format("%04.2f") ,Gfx.TEXT_JUSTIFY_LEFT);
         
         dc.drawText(25, 60,font,"Time:" ,Gfx.TEXT_JUSTIFY_LEFT);
-        dc.drawText(85, 60,font,ds.getFormatedTime() ,Gfx.TEXT_JUSTIFY_LEFT);
+        dc.drawText(85, 60,font,ds.getFormatedTime(ds.getTime()*1000) ,Gfx.TEXT_JUSTIFY_LEFT);
         
       	dc.drawText(25, 80,font,"Min HR:"  ,Gfx.TEXT_JUSTIFY_LEFT);
 		dc.drawText(85, 80,font,ds.getMinHR().format("%d") ,Gfx.TEXT_JUSTIFY_LEFT);

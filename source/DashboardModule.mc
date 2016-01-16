@@ -57,25 +57,43 @@ module Dashboard
         return app.getProperty("minHR_prop");
 	}
 	
-	 function getFormatedTime()
+	function getFormatedTime(elapsedTimeInMs)
     {
-    	var timeInSeconds = getTime();
-    	var seconds = timeInSeconds % 60;
-    	var elapsedTimeInMinutes = (timeInSeconds - seconds)/60;
+    	var sign ="";
+    	
+    	if(elapsedTimeInMs<0)
+    	{
+    		sign ="-";
+    		elapsedTimeInMs = - elapsedTimeInMs;
+    	}
+    	
+    	var elapsedTimeInSeconds = elapsedTimeInMs / 1000;
+    	var seconds = elapsedTimeInSeconds % 60;
+    	var elapsedTimeInMinutes = (elapsedTimeInSeconds - seconds)/60;
     	var minutes = elapsedTimeInMinutes % 60;
     	var hours = 0 ;
     	
     	if(elapsedTimeInMinutes > 60)
     	{
-    		hours = (timeInSeconds - seconds  - minutes * 60) / 3600;
+    		hours = (elapsedTimeInSeconds - seconds * 60 - minutes * 3600) / 3600;
     	}
     	
-    	var result = hours.format("%1d") + ":" + minutes.format("%02d") + ":" + seconds.format("%02d");
+    	var result;
     	
-    	Sys.println("getFormatedTime(" + timeInSeconds.format("%d") + ")=" + result);
+    	if (hours>0)
+    	{
+    		result = sign + hours.format("%1d") + ":" + minutes.format("%02d") + ":" + seconds.format("%02d");
+    	}
+    	else
+    	{
+    		result  = sign + minutes.format("%02d") + ":" + seconds.format("%02d");
+    	}
+    	
+    	Sys.println("getFormatedTime(" + elapsedTimeInMs.format("%d") + ")=" + result);
     
     	return result;	
     }
+	
     
     function getExpectedSpeed()
 	{

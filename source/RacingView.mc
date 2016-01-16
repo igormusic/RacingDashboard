@@ -129,7 +129,7 @@ class RacingView extends Ui.View
         var minGreen = ds.getMinExpectedSpeed(greenTolerance);
         var maxGreen = ds.getMaxExpectedSpeed(greenTolerance); 
         var secondsAhead = ds.getSecondsAhead(elapsedDistance, elapsedTime);
-        var timeAhead = getFormatedTime(secondsAhead);
+        var timeAhead = ds.getFormatedTime(secondsAhead);
 		
 		Sys.println("currentHeartRate=" + currentHeartRate.format("%d"));
 		Sys.println("averageSpeed=" + averageSpeed.format("%d"));
@@ -151,29 +151,11 @@ class RacingView extends Ui.View
     	drawDistanceGauge(dc, elapsedDistance, ds.getDistance());
     	
     	//activity.elapsedTime - in ms
-    	drawTime(dc,getFormatedTime(elapsedTime),timeAhead);
+    	drawTime(dc,ds.getFormatedTime(elapsedTime),timeAhead);
     	drawCadence(dc, currentCadence);
     }
     
-    function getFormatedTime(elapsedTimeInMs)
-    {
-    	var elapsedTimeInSeconds = elapsedTimeInMs / 1000;
-    	var seconds = elapsedTimeInSeconds % 60;
-    	var elapsedTimeInMinutes = (elapsedTimeInSeconds - seconds)/60;
-    	var minutes = elapsedTimeInMinutes % 60;
-    	var hours = 0 ;
-    	
-    	if(elapsedTimeInMinutes > 60)
-    	{
-    		hours = (elapsedTimeInSeconds - seconds * 60 - minutes * 3600) / 3600;
-    	}
-    	
-    	var result = hours.format("%1d") + ":" + minutes.format("%02d") + ":" + seconds.format("%02d");
-    	
-    	Sys.println("getFormatedTime(" + elapsedTimeInMs.format("%d") + ")=" + result);
     
-    	return result;	
-    }
     
     function getActivityInfo()
     {
