@@ -110,6 +110,40 @@ module Dashboard
     	return ahead;
     }
     
+    function speedToPace(metersPerSecond) {
+    	
+    	if(metersPerSecond == 0)
+    	{
+    		return "0:00";
+    	}
+    
+   		var secondsPerKM = 1000.0 / metersPerSecond;
+   	 	
+   	 	var minutesPerKM = secondsPerKM / 60;
+   	 	var minutes = minutesPerKM.toLong();
+   	 	
+   	 	var seconds = secondsPerKM - minutes * 60;
+   	 	
+   	 	var result = minutes.format("%d") + ":" + seconds.format("%02d");
+   	 	
+   	 	Sys.println("speedToPace(" + metersPerSecond.format("%f") +")=" + result);
+    
+    	return result;
+    }
+    
+    //metersPerSecond: original speed
+    //paceSecondsDelta: how many seconds pace should be faster/slower than original speed
+    //return: speed adjusted for pace that is faster/slower number of seconds
+    function getAdjsutedSpeed(metersPerSecond, paceSecondsDelta)
+    {
+    
+    	var secondsPerKM = (1000.0 / metersPerSecond) + paceSecondsDelta;
+    	
+    	var result = 1000.0 / secondsPerKM;
+    
+    	return result;	
+    }
+    
    
     function getMinExpectedSpeed(secondsLate)
     {

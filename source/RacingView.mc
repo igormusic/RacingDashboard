@@ -121,13 +121,14 @@ class RacingView extends Ui.View
 			}
 		}
 		
-		//assume +- 0.75% tolerance for HR gauge, and 0.25% tolerance for green section 
-        var totalTolerance = ds.getTime() * 0.75 / 100;
-        var greenTolerance = ds.getTime() * 0.25 / 100;
-        var minSpeed = ds.getMinExpectedSpeed(totalTolerance);
-        var maxSpeed = ds.getMaxExpectedSpeed(totalTolerance);
-        var minGreen = ds.getMinExpectedSpeed(greenTolerance);
-        var maxGreen = ds.getMaxExpectedSpeed(greenTolerance); 
+		//assume +- 5 second tolerance for pace gauge and +-2 second tolerance for green section 
+        var expectedSpeed = ds.getExpectedSpeed();
+        var minSpeed = ds.getAdjsutedSpeed(expectedSpeed,5);
+        var maxSpeed = ds.getAdjsutedSpeed(expectedSpeed,-5);
+        var minGreen = ds.getAdjsutedSpeed(expectedSpeed,2);
+        var maxGreen = ds.getAdjsutedSpeed(expectedSpeed,-2); 
+        
+        
         var secondsAhead = ds.getSecondsAhead(elapsedDistance, elapsedTime);
         var timeAhead = ds.getFormatedTime(secondsAhead);
 		
@@ -136,9 +137,8 @@ class RacingView extends Ui.View
 		Sys.println("elapsedDistance=" + elapsedDistance.format("%d"));
 		Sys.println("currentCadence=" + currentCadence.format("%d"));
 		Sys.println("elapsedTime=" + elapsedTime.format("%d"));
-       	Sys.println("totalTolerance=" + totalTolerance.format("%f"));
-       	Sys.println("greenTolerance=" + greenTolerance.format("%f"));
-       	Sys.println("minSpeed=" + minSpeed.format("%f"));
+       	Sys.println("expectedSpeed=" + expectedSpeed.format("%f"));
+        Sys.println("minSpeed=" + minSpeed.format("%f"));
        	Sys.println("maxSpeed=" + maxSpeed.format("%f"));
        	Sys.println("minGreen=" + minGreen.format("%f"));
        	Sys.println("maxGreen=" + maxGreen.format("%f"));
@@ -311,32 +311,15 @@ class RacingView extends Ui.View
         }
         
         var numberHeight = dc.getFontHeight(Gfx.FONT_LARGE)/2;
-        dc.drawText(cX, cY  - r + numberHeight / 2 ,Gfx.FONT_LARGE,speedToPace(currentSpeed),Gfx.TEXT_JUSTIFY_CENTER);
+        dc.drawText(cX, cY  - r + numberHeight / 2 ,Gfx.FONT_LARGE,ds.speedToPace(currentSpeed),Gfx.TEXT_JUSTIFY_CENTER);
         
        
         drawPaceTriangle(dc, currentSpeed, cX, cY, r, minSpeed,maxSpeed);
     }
     
-    function speedToPace(metersPerSecond) {
-    	
-    	if(metersPerSecond == 0)
-    	{
-    		return "0:00";
-    	}
     
-   		var secondsPerKM = 1000.0 / metersPerSecond;
-   	 	
-   	 	var minutesPerKM = secondsPerKM / 60;
-   	 	var minutes = minutesPerKM.toLong();
-   	 	
-   	 	var seconds = secondsPerKM - minutes * 60;
-   	 	
-   	 	var result = minutes.format("%d") + ":" + seconds.format("%02d");
-   	 	
-   	 	Sys.println("speedToPace(" + metersPerSecond.format("%f") +")=" + result);
     
-    	return result;
-    }
+    
    function drawPaceTriangle(dc, currentSpeed, cX, cY, r, min,max)
     {
     	var speed = boundValue(currentSpeed, min, max);
